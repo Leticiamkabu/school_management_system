@@ -21,15 +21,19 @@ class StudentRegisterationView(APIView):
     def post(self, request):
         
         student = 0
-        for student in Admission_Forms_detail.objects.all():
+        for students in Admission_Forms_detail.objects.all():
             
-            if student.admission_number == int(request.data.get('admission_number')) and student.status == 'Approved':
+            if students.admission_number == int(request.data.get('admission_number')) and students.status == 'Approved':
                 student = int(request.data.get('admission_number'))
                 
         if student == int(request.data.get('admission_number')):
             pass
         else:
-                
+            print(type(student))
+            print(student)
+            print(int(request.data.get('admission_number')))
+            print(type(int(request.data.get('admission_number'))))  
+            
             return Response({'Your admission was not approved':'Contact the school authorities or apply next time. Thank you'})
         
         serializer = StudentRegisterationSerializer(data = request.data)
@@ -45,9 +49,9 @@ class TeacherRegisterationView(APIView):
     def post(Self, request):
     
         teacher = 0
-        for teacher in Application_Form_detail.objects.all():
+        for teachers in Application_Form_detail.objects.all():
             
-            if teacher.application_number == int(request.data.get('application_number')) and teacher.status == 'Approved':
+            if teachers.application_number == int(request.data.get('application_number')) and teachers.status == 'Approved':
                 teacher = int(request.data.get('application_number'))
                 
         if teacher == int(request.data.get('application_number')):

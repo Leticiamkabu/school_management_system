@@ -42,7 +42,7 @@ class TeacherRegisterationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = TeacherRegisteration
-        fields = ['username', 'password', 'position','application_number']
+        fields = ['username', 'password', 'position','application_number', 'subject']
         
         def create(self, validated_data):
             
@@ -51,6 +51,7 @@ class TeacherRegisterationSerializer(serializers.ModelSerializer):
                 password = validated_data['passowrd'],
                 position = validated_data['position'],
                 application_number = validated_data['application_number'],
+                subject = validated_data['subject'],
             )
             
             teacher.save()

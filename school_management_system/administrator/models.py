@@ -4,6 +4,8 @@ from django.db.models.signals import pre_save, post_delete, post_save
 from django.dispatch import receiver
 import os
 from django.conf import settings
+from django.apps import apps
+from django.core.exceptions import ObjectDoesNotExist
 # from authentication.models import StudentRegisteration
 
 
@@ -135,12 +137,13 @@ def adding_fee_amount_to_payment_form(sender,instance, **kwargs):
         
 # from authentication.models import TeacherRegisteration
 class Course(models.Model):
+    # id = models.AutoField()
     name = models.CharField(max_length = 200, unique = True)
     description = models.TextField(max_length = 500)
     course_number = models.IntegerField()
     level = models.CharField(max_length = 200)
     teacher = models.OneToOneField('authentication.TeacherRegisteration', on_delete= models.SET_NULL, null = True)
-    student = models.ForeignKey(StudentRegisteration, on_delete= models.CASCADE)
+    student = models.ManyToManyField(StudentRegisteration)
     
        
 @receiver(pre_save, sender = Course)
@@ -148,6 +151,22 @@ def generate_course_number(sender, instance, **kwargs):
     instance.course_number = random.randint(500000, 20000000)
     
     
-@receiver(pre_save, sender = Course)
+@receiver(post_save, sender = Course)
 def get_associated_students(sender, instance, **kwargs):
-    instance.student = StudentRegisteration.objects.get(level = instance.level)
+    try:
+        students = StudentRegisteration.objects.filter(level=instance.level)
+        if students.exists():
+            instance.student.set(students)
+    except ObjectDoesNotExist:
+        pass
+    
+@receiver(pre_save, sender = Course)
+def get_associated_teachers(sender, instance, **kwargs):
+    model_name = 'authentication.TeacherRegisteration'
+    TeacherRegisteration = apps.get_model(*model_name.split('.'))
+#    TeacherRegisteration = <class 'authentication.models.TeacherRegisteration'>
+    instance.teacher = TeacherRegisteration.objects.get(subject=instance.name)
+    
+    
+
+    

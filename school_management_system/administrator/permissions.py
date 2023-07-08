@@ -9,6 +9,12 @@ class Admin_priviledge(permissions.BasePermission):
         if request.user.is_superuser:
             return True
    
+class Student_priviledge(permissions.BasePermission):
+    
+    def has_object_permission(self, request,view, obj):
+        
+        if request.user.status == 'Student':
+            return True
     
 # class AuthorAllStaffAllButEditOrReadOnly(permissions.BasePermission):
 

@@ -79,7 +79,13 @@ def create_student_user_details(sender, instance, created, **kwargs):
         student_user.set_password(instance.password)
         student_user.save()  
         
-        
+SUBJECT_CHOICES = (
+    ('English', 'English'),
+    ('Science', 'Science'),
+    ('Math','Math'),
+    ('Music', 'Music'),
+    ('Language', 'Language')
+)
         
 class TeacherRegisteration(models.Model):
     username = models.CharField(max_length = 200)
@@ -88,6 +94,7 @@ class TeacherRegisteration(models.Model):
     position = models.CharField(max_length = 200)
     application_number = models.IntegerField(default = 0)
     teacher_id = models.IntegerField()
+    subject = models.CharField(max_length = 300, choices = SUBJECT_CHOICES, default = 'None')
     
     
 @receiver(pre_save, sender = TeacherRegisteration)
