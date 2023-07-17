@@ -138,13 +138,13 @@ def adding_fee_amount_to_payment_form(sender,instance, **kwargs):
 # from authentication.models import TeacherRegisteration
 class Course(models.Model):
     # id = models.AutoField()
-    name = models.CharField(max_length = 200, unique = True)
+    name = models.CharField(max_length = 200)
     description = models.TextField(max_length = 500)
     course_number = models.IntegerField()
     level = models.CharField(max_length = 200)
     teacher = models.OneToOneField('authentication.TeacherRegisteration', on_delete= models.SET_NULL, null = True)
     student = models.ManyToManyField(StudentRegisteration)
-    
+    registered_students = models.ManyToManyField(StudentRegisteration, default = 'None', related_name = "registerd_students")
        
 @receiver(pre_save, sender = Course)
 def generate_course_number(sender, instance, **kwargs):
@@ -168,5 +168,13 @@ def get_associated_teachers(sender, instance, **kwargs):
     instance.teacher = TeacherRegisteration.objects.get(subject=instance.name)
     
     
-
+# @receiver(pre_save, sender = Course)
+# def generate_registered_students(sender, instance, **kwargs):
+#     instance.registered_students.set([])    
+    
+@receiver(post_save, sender=Course)
+def generate_registered_students(sender, instance, created, **kwargs):
+    if created:
+        instance.save()  # Save the instance to generate an ID
+        instance.registered_students.set([])
     

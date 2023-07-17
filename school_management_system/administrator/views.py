@@ -2,7 +2,6 @@ from django.shortcuts import render
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# from rest_framework import permissions
 from .permissions import *
 from .models import *
 
@@ -26,7 +25,7 @@ class Admission_view(APIView):
         queryset = Admission_Forms_detail.objects.all()
         permission_classes = (Admin_priviledge,)
         
-        # queryset = Application_Form_detail.objects.all()
+        
         
         for admission_approval in queryset:
             if int(admission_approval.grade) <= 15:
@@ -37,9 +36,7 @@ class Admission_view(APIView):
                 
             admission_approval.save()
         
-        # for admission_approval in queryset:
-        #     admission_approval.status = 'Approved'
-        #     admission_approval.save()
+    
            
         serializer = Admission_Forms_detailSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -103,12 +100,7 @@ class PaymentView(APIView):
     def patch(self,request,name,format=None):
         permission_classes = (Admin_priviledge)
         queryset = Student_Payment_Details.objects.get(name = name)
-        # serializer = StudentAcademicProgramSerializer(qs, data=data, many=True, partial=True)
-        # for student in queryset:
-        #     if student.name == request.data:
-                
-        
-        #  data = request.DATA
+    
     
         serializer = Student_Payment_DetailsSerializer(queryset, data=request.data, partial=True)
 
@@ -121,7 +113,7 @@ class PaymentView(APIView):
         
     def post(self, request):
         permission_classes = (Admin_priviledge)
-        # queryset = Student_Payment_Details.objects.filter(student.student_id == id )
+        
         
         serializer = Student_Payment_DetailsSerializer(data = request.data)
         serializer.is_valid(raise_exception = True)
