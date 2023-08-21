@@ -27,7 +27,7 @@ class Course_registeration(APIView):
     # patching a many to many field and making sure the user is authorized for theis action.
     def patch(self,request, registered_student_id):
         student = StudentRegisteration.objects.get(registered_student_id = registered_student_id)
-        permission_classes = (Student_privilege,)
+        # permission_classes = (Student_privilege,)
         queryset = Course.objects.filter(level = student.level)
         token = request.headers.get('Authorization', None)
         modified_token = token.replace('Bearer ','')
@@ -56,8 +56,8 @@ class Course_registeration(APIView):
                                 pass
                         
                     else:
-                        print("No")
-                        print(users.id)
+                        # print("No")
+                        # print(users.id)
                         return Response({'Your are not required to access this functionality':'Thank you'})    
                 
        

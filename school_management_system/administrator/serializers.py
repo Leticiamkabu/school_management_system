@@ -91,3 +91,10 @@ class CourseSerializer(serializers.ModelSerializer):
         return course
     
     
+class Time_TableSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Time_Table
+        fields = ['name', 'level', 'time', 'day', 'course']
+        
+    

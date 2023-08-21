@@ -8,7 +8,11 @@ from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 # from authentication.models import StudentRegisteration
 
-
+LEVEL = (
+    ('Form1', 'Form1'),
+    ('Form2', 'Form2'),
+    ('Form3', 'Form3'),
+)
 
 GENDER = (
     ('Male', 'Male'),
@@ -177,4 +181,14 @@ def generate_registered_students(sender, instance, created, **kwargs):
     if created:
         instance.save()  # Save the instance to generate an ID
         instance.registered_students.set([])
+    
+
+
+class Time_Table(models.Model):
+    name = models.TextField(max_length = 200)
+    level = models.CharField(max_length = 200, choices= LEVEL , default = None)
+    time = models.TimeField()
+    day = models.DateField()
+    course = models.CharField(max_length = 200)
+    
     
